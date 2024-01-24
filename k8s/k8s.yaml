@@ -1,0 +1,33 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcp-test-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gcp-test
+  template:
+    metadata:
+      labels:
+        app: gcp-test
+    spec:
+      containers:
+        - name: gcp-test
+          image: gcr.io/your-project-id/gcp-test:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gcp-test-service
+spec:
+  selector:
+    app: gcp-test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
